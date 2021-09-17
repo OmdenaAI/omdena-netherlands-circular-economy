@@ -12,6 +12,6 @@ To predict the yield of a specific crops by using data such as rainfall, tempera
 
 | Task No| Task Name | Details |
 |-|-|-|
-|1| Data collection  |  (Data folder)[https://github.com/OmdenaAI/omdena-netherlands-circular-economy/tree/main/src/tasks/task-4-crop-yield-prediction/data]
+|1| Data collection  |  [https://github.com/OmdenaAI/omdena-netherlands-circular-economy/tree/main/src/tasks/task-4-crop-yield-prediction/data](Data folder)
 |2|         |         |
 |3|         |         |
