@@ -93,26 +93,11 @@ def eda_year_yield_scatter(weather_yield_data, chosen_region, chosen_crop):
 
     weather_yield_data = weather_yield_data[weather_yield_data['Province'] == chosen_region]
     
-        # (weather_yield_data['year'].isin(actual_years)) & \
-        # (weather_yield_data['FarmTypes'] == 'A009481'))
-    
     fig = px.scatter(x=weather_yield_data['Year'], y=weather_yield_data[internal_crop_name], labels={
                      "x": "Year",
                         "y": "Crop yield (in millions per hectare)"})
     st.plotly_chart(fig)
-    # fig.show()
-    # fig = plt.figure()
-    # ax = fig.add_subplot(1, 1, 1)
-    # ax.scatter(
-    #     ,
-    #     ,
-    # )
-    # ax.set_xlabel("Year")
-    # ax.set_xlim([2001, 2018])
-    # ax.set_xticklabels(actual_years, rotation=45, ha="right")
-    # ax.set_ylabel("Crop yield (in millions per hectare)")
-    
-    # st.write(fig)
+
 
 def predict_yield(crop_name, province):
 
