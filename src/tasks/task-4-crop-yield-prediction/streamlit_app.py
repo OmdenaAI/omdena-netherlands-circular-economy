@@ -14,20 +14,20 @@ st.set_page_config(
 	)
 
 st.title('Task 4 - Crop Yield Prediction')
-with st.beta_expander("Problem Statement"):
+with st.expander("Problem Statement"):
     st.write("""To predict the yield of a specific crops by 
         using data such as rainfall, temperature, soil composition, 
         PH-values etc. """)
-with st.beta_expander("Approach"):
-    st.write("""To be filled """)
-with st.beta_expander("Models used"):
-    st.write("""To be filled """)
+with st.expander("Approach"):
+    st.write(""" Multi Linear regression:  """)
+with st.expander("Models used"):
+    st.write("""sklearn Linear regression:  """)
 
 @st.cache
 # To start with, just loading and returning
 # We can show filtered details little later
 def load_province_data():
-    province_data = pd.read_csv("/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/data/Province_data.csv", delimiter=";")
+    province_data = pd.read_csv("data/Province_data.csv", delimiter=";")
     columns = province_data.columns
     print(columns)
     filtered_province_data = province_data[['Geo Point', 'Provincie name', 'Gemeente name']]
@@ -35,17 +35,17 @@ def load_province_data():
 
 @st.cache
 def load_weather_stations_data():
-    weather_stations_data = pd.read_csv("/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/data/weather_knmi_stations_2018.csv", delimiter=";")
+    weather_stations_data = pd.read_csv("data/weather_knmi_stations_2018.csv", delimiter=";")
     return weather_stations_data
 
 @st.cache
 def load_weather_data():
-    weather_data = pd.read_csv("task-4-crop-yield-prediction/weather_KNMI_20181231.csv", delimiter=";", nrows=500)
+    weather_data = pd.read_csv("data/province_weather_2021 (1).csv", delimiter=";", nrows=500)
     return weather_data
 
 @st.cache
 def load_yield_data():
-    yield_data = pd.read_csv("/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/data/Yield_data_cbs.csv", delimiter=";")
+    yield_data = pd.read_csv("data/Yield_data_cbs.csv", delimiter=";")
     yield_data = yield_data[["FarmTypes","Periods","NumberOfFarmsTotal_1","PotatoesTotal_9", "VegetablesArable_13", "Cereals_14", "IndustrialCrops_16",
 "Pulses_17", "SugarBeets_18", "OtherArableCrops_19", "FruitInTheOpen_44", "MushroomsTotal_68"]]
     yield_data = yield_data.iloc[:500]
@@ -53,14 +53,14 @@ def load_yield_data():
 
 @st.cache
 def load_weather_yield_data():
-    weather_yield_data = pd.read_csv("/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/data/merged_weather_yield_(3).csv")
+    weather_yield_data = pd.read_csv("data/merged_weather_yield_(3).csv")
     
     weather_yield_data_farm1 = weather_yield_data[weather_yield_data['FarmTypes']=='A009481']
     return weather_yield_data_farm1
 
 @st.cache
 def load_2021_weather():
-    weather_2021 = pd.read_csv('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/data/province_weather_2021 (1).csv', index_col=0)
+    weather_2021 = pd.read_csv('data/province_weather_2021 (1).csv', index_col=0)
     weather_2021.drop(['STN', 'year'], axis=1, inplace=True)
     return weather_2021
 
@@ -68,7 +68,7 @@ def load_2021_weather():
 def eda_year_yield_scatter(weather_yield_data, chosen_region, chosen_crop):
     # Line chart for crop-yield
 
-    actual_years = weather_yield_data.Year.unique()
+    # actual_years = weather_yield_data.Year.unique()
 
     # Default is Potato
     internal_crop_name = "PotatoesTotal_9"
@@ -121,42 +121,42 @@ def predict_yield(crop_name, province):
     selected_province_weather.drop('Province', axis=1, inplace=True)
 
     if crop_name == "Potatoes":
-        potatoe_model =pickle.load(open('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/models/potatoes.sav', 'rb'))
+        potatoe_model =pickle.load(open('models/potatoes.sav', 'rb'))
         predict = potatoe_model.predict(selected_province_weather)
         return predict
 
     elif crop_name == "Arable Vegetables":
-        arable_veg_model = pickle.load(open('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/models/arable_vegetables.sav', 'rb'))
+        arable_veg_model = pickle.load(open('models/arable_vegetables.sav', 'rb'))
         predict = arable_veg_model.predict(selected_province_weather)
         return predict
 
     elif crop_name == "Cereals":
-        cereal_model = pickle.load(open('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/models/cereal_model.sav', 'rb'))
+        cereal_model = pickle.load(open('models/cereal_model.sav', 'rb'))
         predict = cereal_model.predict(selected_province_weather)
         return predict
 
     elif crop_name == "Industrial Crops":
-        industrial_model= pickle.load(open('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/models/industrial_crops_model.sav', 'rb'))
+        industrial_model= pickle.load(open('models/industrial_crops_model.sav', 'rb'))
         predict = industrial_model.predict(selected_province_weather)
         return predict
 
     elif crop_name == "Pulses":
-        pulses_model = pickle.load(open('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/models/pulses_model.sav', 'rb'))
+        pulses_model = pickle.load(open('models/pulses_model.sav', 'rb'))
         predict = pulses_model.predict(selected_province_weather)
         return predict
 
     elif crop_name == "Sugar Beets":
-        sugar_model = pickle.load(open('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/models/sugar_beets_model.sav', 'rb'))
+        sugar_model = pickle.load(open('models/sugar_beets_model.sav', 'rb'))
         predict = sugar_model.predict(selected_province_weather)
         return predict
 
     elif crop_name == "Other Arable Crops":
-        other_arable_model = pickle.load(open('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/models/other_arable_crops_model.sav', 'rb'))
+        other_arable_model = pickle.load(open('models/other_arable_crops_model.sav', 'rb'))
         predict = other_arable_model.predict(selected_province_weather)
         return predict
 
     elif crop_name == "Fruits":
-        fruits_model = pickle.load(open('/Users/olayile/omdena-netherlands-circular-economy/src/tasks/task-4-crop-yield-prediction/models/fruits_model.sav', 'rb'))
+        fruits_model = pickle.load(open('models/fruits_model.sav', 'rb'))
         predict = fruits_model.predict(selected_province_weather)
         return predict 
  
@@ -191,12 +191,90 @@ if st.sidebar.button("Explore Weather Stations Dataset"):
     NAME       Station name
 """)
 
-# if st.sidebar.button("Explore Weather Dataset"):
-#     weather_data = load_weather_data()
-#     st.write("Historical weather in the Netherlands collected from 1901 to 2018 (Displaying first 500 records)")
-#     st.write("Data source: https://www.kaggle.com/sinaasappel/historical-weather-in-the-netherlands-19012018 ")
-#     st.write(weather_data)
-#     st.write("Meta Data:")
+if st.sidebar.button("Explore Weather Dataset"):
+    weather_data = load_weather_data()
+    st.write("Historical weather in the Netherlands collected from 1901 to 2018 (Displaying first 500 records)")
+    st.write("Data source: https://www.kaggle.com/sinaasappel/historical-weather-in-the-netherlands-19012018 ")
+    st.write(weather_data)
+    st.write("""Meta Data: 
+
+DDVEC     = Vector mean wind direction in degrees (360=north, 90=east, 180=south, 270=west, 0=calm/variable)
+
+FHVEC     =  Vector mean windspeed (in 0.1 m/s)
+
+FG        = Daily mean windspeed (in 0.1 m/s)
+
+FHX       = Maximum hourly mean windspeed (in 0.1 m/s)
+
+FHXH      = Hourly division in which FHX was measured
+
+FHN       = Minimum hourly mean windspeed (in 0.1 m/s)
+
+FHNH      = Hourly division in which FHN was measured
+
+FXX       = Maximum wind gust (in 0.1 m/s)
+
+FXXH      = Hourly division in which FXX was measured
+
+TG        = Daily mean temperature in (0.1 degrees Celsius)
+
+TN        = Minimum temperature (in 0.1 degrees Celsius)
+
+TNH       = Hourly division in which TN was measured
+
+TX        = Maximum temperature (in 0.1 degrees Celsius)
+
+TXH       = Hourly division in which TX was measured
+
+T10N      = Minimum temperature at 10 cm above surface (in 0.1 degrees Celsius)
+
+T10NH     = 6-hourly division in which T10N was measured; 6=0-6 UT, 12=6-12 UT, 18=12-18 UT, 24=18-24 UT
+
+SQ        = Sunshine duration (in 0.1 hour) calculated from global radiation (-1 for <0.05 hour)
+
+SP        = Percentage of maximum potential sunshine duration
+
+Q         = Global radiation (in J/cm2)
+
+DR        = Precipitation duration (in 0.1 hour)
+
+RH        = Daily precipitation amount (in 0.1 mm) (-1 for <0.05 mm)
+
+RHX       = Maximum hourly precipitation amount (in 0.1 mm) (-1 for <0.05 mm)
+
+RHXH      = Hourly division in which RHX was measured
+
+PG        = Daily mean sea level pressure (in 0.1 hPa) calculated from 24 hourly values
+
+PX        = Maximum hourly sea level pressure (in 0.1 hPa)
+
+PXH       = Hourly division in which PX was measured
+
+PN        = Minimum hourly sea level pressure (in 0.1 hPa)
+
+PNH       = Hourly division in which PN was measured
+
+VVN       = Minimum visibility; 0: <100 m, 1:100-200 m, 2:200-300 m,..., 49:4900-5000 m, 50:5-6 km, 56:6-7 km, 57:7-8 km,..., 79:29-30 km, 80:30-35 km, 81:35-40 km,..., 89: >70 km)
+
+VVNH      = Hourly division in which VVN was measured
+
+VVX       = Maximum visibility; 0: <100 m, 1:100-200 m, 2:200-300 m,..., 49:4900-5000 m, 50:5-6 km, 56:6-7 km, 57:7-8 km,..., 79:29-30 km, 80:30-35 km, 81:35-40 km,..., 89: >70 km)
+
+VVXH      = Hourly division in which VVX was measured
+
+NG        = Mean daily cloud cover (in octants, 9=sky invisible)
+
+UG        = Daily mean relative atmospheric humidity (in percents)
+
+UX        = Maximum relative atmospheric humidity (in percents)
+
+UXH       = Hourly division in which UX was measured
+
+UN        = Minimum relative atmospheric humidity (in percents)
+
+UNH       = Hourly division in which UN was measured
+
+EV24      = Potential evapotranspiration (Makkink) (in 0.1 mm)""")
 
 if st.sidebar.button("Explore Yield Dataset"):
     yield_data = load_yield_data()
@@ -259,4 +337,4 @@ show_prediction_for = st.sidebar.selectbox(
 
 if st.sidebar.button("Click to see Prediction"):
     st.write("Take a look at the PREDICTED YIELD details of ", show_prediction_for)
-    st.write(predict_yield(show_prediction_for, chosen_2021)[0])
+    st.write(predict_yield(show_prediction_for, chosen_2021)[0], "million tons per hectare" )
