@@ -1,4 +1,4 @@
-Dataset used:
+Datasets used:
 
 1. [IP102: A Large-Scale Benchmark Dataset for Insect Pest Recognition](https://github.com/xpwu95/IP102)
 
